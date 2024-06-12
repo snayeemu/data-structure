@@ -10,6 +10,10 @@ int main()
 
     for (int number : v)
         cout << number << " ";
+    cout << endl;
+    v.erase(v.begin() + 1, v.end() - 1); // erase
+    for (int number : v)
+        cout << number << " ";
 
     return 0;
 }
