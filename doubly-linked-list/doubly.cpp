@@ -40,8 +40,7 @@ public:
 
     void print()
     {
-        Node *temp = new Node;
-        temp = this->head;
+        Node *temp = head;
 
         while (temp != NULL)
         {
@@ -71,7 +70,14 @@ public:
                 return;
             }
         }
+        if(previous == tail) 
+        {
+            push(value);
+            return;
+        }
+
         current = previous->next;
+
 
         Node *newNode = new Node;
         newNode->value = value;
@@ -187,7 +193,9 @@ int main()
         ls->push(value);
     }
 
-    ls->insert(2, 1);
+    ls->insert(2, 3);
+    ls->deleteAt(0);
+    ls->print();
     ls->printReverse();
 
     delete ls;
