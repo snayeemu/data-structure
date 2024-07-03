@@ -12,11 +12,13 @@ class linkedList
 {
 public:
     Node *head, *tail;
+    int size;
 
     linkedList()
     {
         this->head = NULL;
         this->tail = NULL;
+        this->size = 0;
     }
 
     void push(int value)
@@ -36,6 +38,7 @@ public:
             tail->next = temp;
             tail = temp;
         }
+        size++;
     }
 
     void print()
@@ -70,7 +73,7 @@ public:
                 return;
             }
         }
-        if(previous == tail) 
+        if (previous == tail)
         {
             push(value);
             return;
@@ -78,13 +81,14 @@ public:
 
         current = previous->next;
 
-
         Node *newNode = new Node;
         newNode->value = value;
         previous->next = newNode;
         current->prev = newNode;
         newNode->next = current;
         newNode->prev = previous;
+
+        size++;
     }
 
     void insertAtHead(int value)
@@ -101,6 +105,8 @@ public:
         head->prev = newNode;
         newNode->next = head;
         head = newNode;
+
+        size++;
     }
 
     void deleteAt(int position)
@@ -108,6 +114,11 @@ public:
 
         if (head == NULL)
             return;
+        if (position == size - 1)
+        {
+            deleteTail();
+            return;
+        }
 
         if (position == 0)
         {
@@ -129,11 +140,10 @@ public:
         if (toDelete == NULL)
             return;
         previous->next = toDelete->next;
-        if (toDelete == tail)
-            tail = previous;
-        else
-            toDelete->next->prev = previous;
+        toDelete->next->prev = previous;
+
         delete toDelete;
+        size--;
     }
 
     void deleteHead()
@@ -148,6 +158,24 @@ public:
         else
             head->prev = NULL;
         delete previousHead;
+        size--;
+    }
+
+    void deleteTail()
+    {
+        Node *toDelete = tail;
+        if (tail == head)
+        {
+            head = NULL;
+            tail = NULL;
+        }
+        else
+        {
+            tail->prev->next = NULL;
+            tail = tail->prev;
+        }
+        delete toDelete;
+        size--;
     }
 
     void printReverse()
@@ -193,10 +221,12 @@ int main()
         ls->push(value);
     }
 
-    ls->insert(2, 3);
     ls->deleteAt(0);
+
+    // ls->push(5);
     ls->print();
     ls->printReverse();
+    cout << ls->size;
 
     delete ls;
 
