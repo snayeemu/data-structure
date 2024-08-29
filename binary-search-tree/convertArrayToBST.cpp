@@ -46,29 +46,23 @@ void inOrder(Node *root)
 void printLevelOrder(Node *root)
 {
     queue<Node *> que;
-    que.push(root);
+    if (root)
+        que.push(root);
 
     while (que.size() > 0)
     {
         Node *currentNode = que.front();
-        if (currentNode == root)
-            cout << currentNode->value << " ";
+        cout << currentNode->value << " ";
         que.pop();
 
         if (currentNode->left)
         {
             que.push(currentNode->left);
-            cout << currentNode->left->value << " ";
         }
-        else
-            cout << -1 << " ";
         if (currentNode->right)
         {
             que.push(currentNode->right);
-            cout << currentNode->right->value << " ";
         }
-        else
-            cout << -1 << " ";
     }
 }
 
@@ -120,33 +114,35 @@ bool search(Node *root, int value)
         return search(root->right, value);
 }
 
-void insertNode(Node *&root, int value)
+Node *convert(vector<int> sortedValues, int left, int right)
 {
-    if (root == NULL)
-    {
-        root = new Node(value);
-    }
-    if (value < root->value)
-    {
-        if (root->left == NULL)
-            root->left = new Node(value);
-        else
-            insertNode(root->left, value);
-    }
-    else if (value > root->value)
-    {
-        if (root->right == NULL)
-            root->right = new Node(value);
-        else
-            insertNode(root->right, value);
-    }
+    if (left > right)
+        return NULL;
+    int mid = (left + right) / 2;
+    Node *root = new Node(sortedValues[mid]);
+    Node *leftRoot = convert(sortedValues, left, mid - 1);
+    Node *rightRoot = convert(sortedValues, mid + 1, right);
+    root->left = leftRoot;
+    root->right = rightRoot;
+    return root;
 }
 
 int main()
 {
-    Node *root = inputLevelOrder();
+    vector<int> sortedValues;
+    int value;
 
-    insertNode(root, 9);
+    while (true)
+    {
+        cin >> value;
+        if (value == -1)
+            break;
+        sortedValues.push_back(value);
+    }
+
+    int left = 0, right = sortedValues.size() - 1;
+
+    Node *root = convert(sortedValues, left, right);
 
     printLevelOrder(root);
 
